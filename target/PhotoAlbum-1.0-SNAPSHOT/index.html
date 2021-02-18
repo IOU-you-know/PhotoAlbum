@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="div1">
+
+</div>
+<button id="pre" onclick="pre()">上一张</button>
+<button id="next" onclick="next()">下一张</button>
+<button id="delete" onclick="deleteImg()">删除</button>
+<form id="editForm" action="/PictureServlet?option=add" method="post" enctype="multipart/form-data">
+    <input type="file" class="form-control" placeholder="图片" name="picture">
+    <input type ="submit" value ="提交">
+</form>
+</body>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script>
+    var imgData;
+    var num = 0;
+    let img = document.createElement("img");
+    function next(){
+        num++;
+        if (num>=imgData.length){
+            num = 0;
+        }
+        img.setAttribute("src","/img/"+imgData[num].name);
+    }
+    function pre(){
+        num--;
+        if (num < 0){
+            num = imgData.length - 1;
+        }
+        img.setAttribute("src","/img/"+imgData[num].name);
+    }
+    function deleteImg(){
+        $.ajax({
+            url:"PictureServlet",
+            data:{"option":"delete","id":imgData[num].id,"name":imgData[num].name},
+            type: "POST"
+        })
+        imgData.splice(num);
+        location.reload();
+    }
+    window.onload=function () {
+        $.ajax({
+            //请求资源路径
+            url:"PictureServlet",
+            //请求参数
+            data:{"option":"findAll","id":"27"},
+            //请求方式
+            type:"GET",
+            //响应数据形式
+            dataType:"json",
+            //请求成功后的回调函数
+            success:function (data) {
+                console.log(data)
+                imgData = data;
+                let div = document.getElementById("div1")
+                if (data.length != 0) {
+                    img.setAttribute("src","/img/"+data[0].name);
+                    div.appendChild(img);
+                    // for (let i = 0; i < data.length; i++) {
+                    //     let img = document.createElement("img");
+                    //     img.setAttribute("src","/img/"+data[i].name);
+                    //     div.appendChild(img);
+                    //     console.log(data[i].name);
+                    // }
+                } else {
+                    console.log("长度是0");
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+             $("#p_test").innerHTML = "there is something wrong!";
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(textStatus);
+            }
+        })
+    }
+</script>
+</html>

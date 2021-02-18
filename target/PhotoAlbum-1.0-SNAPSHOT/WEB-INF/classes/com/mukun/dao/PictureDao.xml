@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mukun.dao.PictureDao">
+<!--    <resultMap id="baseResultMap" type="com.mukun.domain.Picture">-->
+<!--        <id column="id" jdbcType="INTEGER" property="id"/>-->
+<!--        <result column="name" jdbcType="VARCHAR" property="name"/>-->
+<!--        <result column="album_id" jdbcType="INTEGER" property="album_id"/>-->
+<!--    </resultMap>-->
+    <!--添加图片-->
+    <insert id="save" parameterType="com.mukun.domain.Picture">
+        insert into picture(name,album_id,p_date) values(#{name},#{album_id},#{p_date})
+    </insert>
+    <!--删除图片-->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from picture where id = #{id}
+    </delete>
+    <!--遍历图片-->
+    <select id="findAll" parameterType="java.lang.Integer"  resultType="Picture" >
+        select * from picture where album_id = #{album_id} order by p_date desc
+    </select>
+    <!--更新笔记-->
+    <update id="update" parameterType="com.mukun.domain.Picture">
+        update picture set note = #{note} where id = #{id}
+    </update>
+    <!--根据id查找图片-->
+    <select id="findById" parameterType="com.mukun.domain.Picture" resultType="Picture">
+        select * from picture where id = #{id}
+    </select>
+</mapper>

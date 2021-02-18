@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mukun.dao.AlbumDao">
+    <!--添加相册-->
+    <insert id="save" parameterType="com.mukun.domain.Album">
+        insert into album(name,a_date) values(#{name},#{a_date})
+    </insert>
+    <!--删除相册-->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from album where id = #{id}
+    </delete>
+    <!--遍历相册-->
+    <select id="findAll" resultType="Album">
+        select * from album order by a_date desc
+    </select>
+    <!--相册封面-->
+    <update id="update" parameterType="com.mukun.domain.Album">
+        update Album set default_img = #{default_img} WHERE id = #{id}
+    </update>
+    <!--根据相册id查询相册-->
+    <select id="findById" parameterType="com.mukun.domain.Album" resultType="Album">
+        select * from album where id = #{id}
+    </select>
+</mapper>

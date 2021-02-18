@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="div1">
+
+</div>
+<form id="editForm" action="/AlbumServlet?option=add" method="post">
+    创建相册:<input type="text" placeholder="name" name="name" value="默认名字"><br>
+    <input type="submit" value="提交"/>
+</form>
+</body>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script>
+    let a1 = document.createElement('a');
+    let a2 = document.createElement('a');
+    window.onload = function () {
+        $.ajax({
+            //请求资源路径
+            url:"AlbumServlet",
+            //请求参数
+            data:{"option":"findAll"},
+            //请求方式
+            type:"GET",
+            //响应数据形式
+            dataType:"json",
+            //请求成功后的回调函数
+            success:function (data) {
+                imgData = data;
+                let div = document.getElementById("div1");
+                if (data.length != 0) {
+                    console.log(data)
+                    for (let i = 0;i < data.length;i++){
+                        let a1 = document.createElement('a');
+                        let btn1 = document.createElement('button');
+                        a1.setAttribute("href","http://localhost/PictureServlet?option=findAll&id="+data[i].id);
+                        let str = "drop("+data[i].id+",'"+data[i].name+"')";
+                        console.log(str);
+                        btn1.setAttribute("onclick",str);
+                        let a1Text = document.createTextNode(data[i].name);
+                        let btnText = document.createTextNode("删除相册");
+                        a1.appendChild(a1Text);
+                        btn1.appendChild(btnText);
+                        div1.appendChild(a1);
+                        div1.appendChild(btn1);
+                    }
+                } else {
+                    console.log("长度是0")
+                }
+            }
+        });
+        drop = function (id,name) {
+            $.ajax({
+                url:"AlbumServlet",
+                data:{"option":"delete","id":id,"name":name},
+                type: "POST"
+            })
+            location.reload();
+        }
+    }
+</script>
+</html>
